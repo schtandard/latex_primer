@@ -1,0 +1,849 @@
+% !TeX root = thesis
+% !TeX encoding = utf8
+% !TeX spellcheck = de_DE
+\documentclass[
+  ngerman,
+  twoside,
+  titlepage=firstiscover,
+  openright,
+  captions=tableheading,
+  BCOR=.5cm,
+  fontsize=11,
+  ]{scrreprt}
+
+% {fontenc} should always be set to [T1].
+% {lmodern} provides the Latin Modern font, a scalable version of Computer Modern.
+% The {textcomp} package provides some glyphs missing by default, notably \textminus and \textmu.
+% \input{glyphtounicode}\pdfgentounicode=1 makes ligatures copy-pasteable.
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\input{glyphtounicode}
+\pdfgentounicode=1
+
+% The {fontspec} package allows font control with LuaTeX or XeTeX.
+% The {unicode-math} package allows the use of unicode math fonts.
+%\usepackage{fontspec}
+%\usepackage[math-style=ISO]{unicode-math}
+
+% The {etoolbox} package gives us some additional macro manipulation capabilities.
+% The {xparse} package provides an advanced interface for defining commands (LaTeX3).
+\usepackage{etoolbox}
+\usepackage{xparse}
+
+%% For general manipulation:
+
+% The {xcolor} package provides advanced color capabilities.
+\usepackage{xcolor}
+
+% The {scalerel} package provides commands for arbitrary scaling of boxes.
+\usepackage{scalerel}
+
+
+%% For page layout:
+
+% The {pdflscape} package allows typesetting parts of the document in landscape mode (pdf compatible).
+% The {rotating} package provides several rotating macros and, notably, sideways floats.
+%\usepackage{pdflscape}
+%\usepackage[figuresright]{rotating}
+
+% The {scrlayer-scrpage} package from the koma script bundle allows changing header and footer.
+\pagestyle{headings}
+\usepackage{scrlayer-scrpage}
+
+
+%% For typesetting text:
+
+% The {babel} package makes sure LaTeX knows your language (choose your language as the package loading option).
+% The {microtype} package conducts "subliminal refinements towards typographical perfection", i.e. makes your document look even better.
+% The {nowidow} package prevents widows and orphans.
+\usepackage[
+%  english,
+  main=ngerman,
+  ]{babel}
+\usepackage{microtype}
+\usepackage[
+  defaultlines=2,
+  all,
+  ]{nowidow}
+
+% The {csquotes} package provides context sensitive quoting facilities and is recommended by {biblatex}.
+\usepackage{csquotes}
+
+% The {array} package provides advanced table creation tools.
+% The {booktabs} package provides tools to make better tables (most notably \toprule, \midrule and \bottomrule).
+\usepackage{array}
+\usepackage{booktabs}
+
+% The {enumitem} package provides improved list environment capabilities.
+%\usepackage{enumitem}
+
+
+%% For typesetting maths:
+
+% The {bm} package provides bold math symbols.
+% The {mathtools} package provides more handy math commands, it is an extension package to {amsmath}.
+% The {mleftright} package provides \mleft and \mright as alternatives to \left and \right with better spacing.
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{mleftright}
+
+% The {dsfont} package provides double stroke math symbols.
+%\usepackage{dsfont}
+
+
+%% The {siunitx} package has to be loaded after the math packages.
+
+% The {siunitx} package provides all commands needed to print numeric values and units, most notably the commands \num, \si and \SI as well as the [S] table column.
+% The {mhchem} package provides commands for typesetting chemical formulas and related expressions.
+% We need to define \xtimes now, because siunitx checks its existence (and possibly size).
+\let\xtimes\times
+\usepackage[
+  locale=DE,
+  output-product=\xtimes,
+  ]{siunitx}
+\usepackage[version=4]{mhchem}
+
+
+%% For images:
+
+% The {graphicx} package provides an improved graphics interface.
+% The {svg} package allows you to include svg images into your document (via \includesvg) using the capabilities of Inkscape (see also http://mirrors.ctan.org/info/svg-inkscape/InkscapePDFLaTeX.pdf).
+% shell-escape (write18, respectively) must be enabled for this.
+% \pdfsuppresswarningpagegroup=1 turns off a (usually) benign warning.
+\usepackage{graphicx}
+\graphicspath{{./img/}}
+\usepackage[inkscapearea=page, usexcolor]{svg}
+\svgpath{{./img/}}
+\pdfsuppresswarningpagegroup=1
+
+
+%% For cross-referencing:
+
+% The {biblatex} package provides advanced bilbiography capabilities.
+% The {hyperref} package converts all internal references to links and offers a lot of further options.
+% The {caption} package offers the capability to fix where Links to a figure lead (to the image instead of the caption) and removes the colon before the caption text when it is empty.
+% The {subcaption} package provides commands for setting captions to subfloats.
+\usepackage[style=phys]{biblatex}
+\usepackage[
+    hidelinks,
+    pdfencoding=auto,
+    bookmarksnumbered,
+  ]{hyperref}
+\usepackage[
+    hypcap,
+  ]{caption}
+\usepackage{subcaption}
+
+
+%%% symbols
+
+%% just symbols
+\makeatletter
+  % constants
+  \newcommand*\e{{\mathrm e}}
+  \renewcommand*\i{{\mathrm i}}
+  % for use in other macros
+  \def\@difsym{{\mathrm d}}
+  \let\@delsym\partial
+  \def\@Difsym{{\mathrm D}}
+  \def\@DifFeynsym{{\mathcal D}}
+  \let\@bndrysym\partial
+\makeatother
+
+% unary operators
+\makeatletter
+  \DeclareMathOperator\grad{grad}
+  \let\div\undefined
+  \DeclareMathOperator\div{div}
+  \DeclareMathOperator\rot{rot}
+  \DeclareMathOperator\laplace{\Delta}
+%  \DeclareMathOperator\laplace{\symup{\Delta}}
+  % \dif[<exponent>]{<var>}
+  % starred version for use at start of integral
+  % double starred version for use at start of enumerator
+  \NewDocumentCommand\dif{s s o m}{%
+    \IfBooleanF{#2}{\IfBooleanTF{#1}{\unskip}{\mathop{}}\!}%
+    \@difsym%
+    \IfValueT{#3}{^{#3}}%
+    #4%
+    \IfBooleanT{#1}{\mathop{}\!}%
+  }
+  % \del[<exponent>]{<var>}
+  % starred version adds no spaces
+  \NewDocumentCommand\del{s o m}{%
+    \IfBooleanF{#1}{\mathop{}\!}%
+    \@delsym_{#3}%
+    \IfValueT{#2}{^{#2}}%
+  }
+  \NewDocumentCommand\bndry{m}{{\@bndrysym #1}}
+\makeatother
+
+% binary operators
+\makeatletter
+  \AtBeginDocument{%
+    \let\xtimes\times
+    \let\times\cdot
+    \let\vectimes\xtimes
+  }
+\makeatother
+
+% operators
+\makeatletter
+  % A command for typesetting expressions with (possibly scaled) delimiters.
+  % Use as follows: \scaled@delimiter@expression[<scale>]{<left_delimiter>}{<middle_delimiter>}{<right_delimiter>}{<expression>}
+  % Input \auto for auto-scaling, . for obsolete delimiters.
+  % In the <expression>, type \<pos>@dlmtr where the delimiters belong (<pos> being left, middle or right).
+  \NewDocumentCommand\scaled@delimiter@expression{o m m m m}{\begingroup
+    \def\@auto##1{\middle##1\let\auto\@auto}%
+    \def\left@dlmtr{\let\auto\mleft\ifx\auto#1\relax\else\mathopen\fi\IfValueT{#1}{#1}#2\let\auto\@auto}%
+    \def\right@dlmtr{\let\auto\mright\ifx\auto#1\relax\else\mathclose\fi\IfValueT{#1}{#1}#4}%
+    \def\middle@dlmtr{\IfValueT{#1}{#1}#3}%
+    #5
+  \endgroup}
+  \NewDocumentCommand\abs{o m}{%
+    \scaled@delimiter@expression[#1]{\lvert}{.}{\rvert}{\left@dlmtr#2\right@dlmtr}%
+  }
+  \NewDocumentCommand\mean{o m o}{%
+    \scaled@delimiter@expression[#1]{\langle}{.}{\rangle}{\left@dlmtr#2\right@dlmtr}%
+    \IfValueT{#3}{_{#3}}%
+  }
+\makeatother
+
+% quotient-like operators
+\makeatletter
+  \NewDocumentCommand\d@quotient{m o m m}{%
+    \frac{#1\IfValueT{#2}{^{#2}\!}#3}%
+      {#1#4\IfValueT{#2}{^{#2}\!}}%
+  }
+  \NewDocumentCommand\dd@quotient{m m m m}{%
+    \frac{#1^2#2}%
+      {#1#3\ifx~#4\relax^{2}\!\else#1#4\fi}%
+  }
+  \newcommand*\diff{\d@quotient\@difsym}
+  \newcommand*\ddiff{\dd@quotient\@difsym}
+  \newcommand*\dell{\d@quotient\@delsym}
+  \newcommand*\ddell{\dd@quotient\@delsym}
+\makeatother
+
+% Vector and matrix commands
+\makeatletter
+  \AtBeginDocument{%
+    \let\arrow\vec
+    \let\vec\bm
+%    \let\vec\symbf
+  }
+%  \def\uvec#1{\hat{\vec{#1}}}
+  \newcommand*\vect[1]{\begin{pmatrix}#1\end{pmatrix}}
+  \newcommand*\absvect[1]{\abs[\auto]{\vect{#1}}}
+\makeatother
+
+% operators to the right
+\makeatletter
+  \NewDocumentCommand\evalwith{O{\bigg} m}{\mathop{}\!#1|_{#2}}
+  \NewDocumentCommand\fromto{O{\bigg} m m}{\mathop{}\!#1|_{#2}^{#3}}
+\makeatother
+
+
+
+%%% macros
+
+%% patches
+
+% Center all floats by default.
+\makeatletter
+  \appto\@floatboxreset{\centering}
+\makeatother
+
+% Change the default style of lists.
+\makeatletter
+  % itemize
+  \renewcommand*\labelitemi{{$\circ$}}
+  \renewcommand*\labelitemii{{\raise.175ex\hbox{$\scriptstyle\diamond$}}}
+  \renewcommand*\labelitemiii{{\raise.285ex\hbox{$\scriptscriptstyle\triangleright$}}}
+  \renewcommand*\labelitemiv{{\raise.285ex\hbox{$\scaleobj{.5}\ast$}}}% needs {scalerel}
+  %\renewcommand*\labelitemiv{{\raise.375ex\hbox{$\scaleobj{.25}{\square}$}}}% needs {scalerel}
+  %\renewcommand*\labelitemiv{{\raise.35ex\hbox{$\centerdot$}}}
+  % enumerate
+  \renewcommand*\theenumi{{\roman{enumi})}}
+  \renewcommand*\theenumii{{\sffamily\small\arabic{enumii}}}
+  \renewcommand*\theenumiii{{\sffamily\alph{enumiii}}}
+  \renewcommand*\theenumiv{{\sffamily\small\Alph{enumiv}}}
+  \renewcommand*\p@enumi{}
+  \renewcommand*\p@enumii{\p@enumi\theenumi-}
+  \renewcommand*\p@enumiii{\p@enumii\theenumii-}
+  \renewcommand*\p@enumiv{\p@enumiii\theenumiii-}
+  \renewcommand*\labelenumi{\theenumi}
+  \renewcommand*\labelenumii{\theenumii}
+  \renewcommand*\labelenumiii{\theenumiii}
+  \renewcommand*\labelenumiv{\theenumiv}
+  % description
+  %\renewcommand*\descfont{\sffamily\bfseries}
+\makeatother
+
+% {hyperref}
+\makeatletter
+  % \url[no-print-prefix]{url}
+  \begingroup
+    \endlinechar=-1 %
+    \catcode`\^^A=14 %
+    \catcode`\^^M\active
+    \catcode`\%\active
+    \catcode`\#\active
+    \catcode`\_\active
+    \catcode`\$\active
+    \catcode`\&\active
+    \let\my@url\hyper@normalise
+    \patchcmd\my@url{\hyper@n@rmalise}{\my@url@}{}{}^^A
+    \global\let\my@url\my@url
+  \endgroup
+  \NewDocumentCommand\my@url@{O{} m}{\endgroup\href{#1#2}{\nolinkurl{#2}}}
+  \renewcommand*\url{\my@url}
+  % \email{e-mail-address}[display-text]
+  \DeclareRobustCommand*\email{\hyper@normalise\my@email}
+  \newcommand*\my@email[1]{\my@email@{#1}}
+  \NewDocumentCommand\my@email@{m O{\nolinkurl{#1}}}{\href{mailto:#1}{#2}}
+\makeatother
+
+% {array}
+% Add aligned fixed width table column specifiers
+% Usage: L{<style>}{<width>} with <style> one of p, m, b (C and R analogously).
+\makeatletter
+  \newcolumntype{L}[2]{>{\raggedright\let\newline\\\arraybackslash\strut}#1{#2}}
+  \newcolumntype{C}[2]{>{\centering\let\newline\\\arraybackslash\strut}#1{#2}}
+  \newcolumntype{R}[2]{>{\raggedleft\let\newline\\\arraybackslash\strut}#1{#2}}
+\makeatother
+
+% {subcaption}
+\makeatletter
+  % Make subfloats center by default.
+  \apptocmd\subcaption@iiminipage{\centering}{}{}
+\makeatother
+
+% {rotating}
+%\makeatletter
+%  % Make sideways floats be a minipage with fixed height, so that \vfill will work.
+%  \patchcmd\@xrotfloat{\begin{minipage}\textheight}{\begin{minipage}[c][\textwidth][c]\textheight}{}{}
+%  \patchcmd\end@rotfloat{\wd\rot@float@box\z@\ht\rot@float@box\z@\dp\rot@float@box\z@}{}{}{}
+%  \def\endsidewaysfigure{\end@rotfloat}
+%  \def\endsidewaystable{\end@rotfloat}
+%  % Make sideways floats center by default.
+%  \apptocmd\@xrotfloat{\centering}{}{}
+%  % Rotate pages with sideways floats (using the mechanism created below).
+%  \apptocmd\@xrotfloat{\thispagepdflscape}{}{}
+%  % Provide a length that contains the \textwidth outside of a sidewaysfigure (i.e. the \textheight when rotated).
+%  \newdimen\outertextwidth
+%  \pretocmd\@xrotfloat{\outertextwidth=\textwidth}{}{}
+%\makeatother
+
+
+%% miscellaneous macros
+
+\makeatletter
+  % \wrap{<butter>}{<bread>}
+  \newcommand*\wrap[2]{#2#1#2}
+\makeatother
+
+% Rotate arbitrary pages, even from inside a sideways float.
+% Needs {pdflscape} and {bophook} (though both could be replaced rather easily if necessary).
+%\makeatletter
+%  \AtBeginPage{%
+%    \@maybe@rotate@current@page
+%  }
+%  \def\@maybe@rotate@current@page{%
+%    \begingroup
+%      \@check@if@current@page@pdflscape
+%      \if@tempswa
+%        \PLS@Rotate{90}%
+%      \else
+%        \PLS@RemoveRotate
+%      \fi
+%    \endgroup
+%  }
+%  \newcount\c@pdf@rot@mark@count
+%  \def\@check@if@current@page@pdflscape{\@tempswafalse}%
+%  \def\thispagepdflscape{%
+%    \global\advance\c@pdf@rot@mark@count 1\relax
+%    \label{@pdf@rot@mark:\the\c@pdf@rot@mark@count}%
+%    \xappto\@check@if@current@page@pdflscape{%
+%      \noexpand\@check@if@ref@is@current@page@{@pdf@rot@mark:\the\c@pdf@rot@mark@count}%
+%    }%
+%  }
+%  \def\@check@if@ref@is@current@page@#1{%
+%    \ifnum\arabic{page}=\@expandable@pageref{#1}\relax
+%      \@tempswatrue
+%    \fi
+%  }
+%  \def\@expandable@pageref#1{%
+%    \expandafter\@@expandable@pageref\csname r@#1\endcsname
+%  }
+%  \def\@@expandable@pageref#1{%
+%    \ifx#1\relax
+%      0%
+%    \else
+%      \expandafter\@secondofarb#1\@nil
+%    \fi
+%  }
+%  \def\@secondofarb#1#2#3\@nil{#2}%
+%\makeatother
+
+
+%% document elements
+
+\makeatletter
+  % taken from scrreprt.sty and modified
+  \renewcommand*\maketitle[1][1]{%
+    \expandafter\ifnum \csname scr@v@3.12\endcsname>\scr@compatibility\relax
+    \else
+      \def\and{%
+        \end{tabular}%
+        \hskip 1em \@plus.17fil%
+        \begin{tabular}[t]{c}%
+      }%
+    \fi
+    \if@titlepage
+      \begin{titlepage}
+        \setcounter{page}{%
+          #1%
+        }%
+        \if@titlepageiscoverpage
+          \edef\titlepage@restore{%
+            \noexpand\endgroup
+            \noexpand\global\noexpand\@colht\the\@colht
+            \noexpand\global\noexpand\@colroom\the\@colroom
+            \noexpand\global\vsize\the\vsize
+            \noexpand\global\noexpand\@titlepageiscoverpagefalse
+            \noexpand\let\noexpand\titlepage@restore\noexpand\relax
+          }%
+          \begingroup
+          \topmargin=\dimexpr \coverpagetopmargin-1in\relax
+          \oddsidemargin=\dimexpr \coverpageleftmargin-1in\relax
+          \evensidemargin=\dimexpr \coverpageleftmargin-1in\relax
+          \textwidth=\dimexpr
+          \paperwidth-\coverpageleftmargin-\coverpagerightmargin\relax
+          \textheight=\dimexpr
+          \paperheight-\coverpagetopmargin-\coverpagebottommargin\relax
+          \headheight=0pt
+          \headsep=0pt
+          \footskip=\baselineskip
+          \@colht=\textheight
+          \@colroom=\textheight
+          \vsize=\textheight
+          \columnwidth=\textwidth
+          \hsize=\columnwidth
+          \linewidth=\hsize
+        \else
+          \let\titlepage@restore\relax
+        \fi
+        \let\footnotesize\small
+        \let\footnoterule\relax
+        \let\footnote\thanks
+        \renewcommand*\thefootnote{\@fnsymbol\c@footnote}%
+        \let\@oldmakefnmark\@makefnmark
+        \renewcommand*{\@makefnmark}{\rlap\@oldmakefnmark}%
+        \ifx\@extratitle\@empty
+          \ifx\@frontispiece\@empty
+          \else
+            \if@twoside\mbox{}\next@tpage\fi
+            \noindent\@frontispiece\next@tdpage
+          \fi
+        \else
+          \noindent\@extratitle
+          \ifx\@frontispiece\@empty
+          \else
+            \next@tpage
+            \noindent\@frontispiece
+          \fi
+          \next@tdpage
+        \fi
+        \setparsizes{\z@}{\z@}{\z@\@plus 1fil}\par@updaterelative
+        \@maketitlepage
+        \if@twoside
+          \@tempswatrue
+          \expandafter\ifnum \@nameuse{scr@v@3.12}>\scr@compatibility\relax
+          \else
+            \ifx\@uppertitleback\@empty\ifx\@lowertitleback\@empty
+              \@tempswafalse
+            \fi\fi
+          \fi
+          \if@tempswa
+            \next@tpage
+            \begin{minipage}[t]{\textwidth}
+              \@uppertitleback
+            \end{minipage}\par
+            \vfill
+            \begin{minipage}[b]{\textwidth}
+              \@lowertitleback
+            \end{minipage}\par
+            \@thanks\let\@thanks\@empty
+          \fi
+        \fi
+        \ifx\@dedication\@empty
+        \else
+          \next@tdpage\null\vfill
+          {\centering\usekomafont{dedication}{\@dedication \par}}%
+          \vskip \z@ \@plus3fill
+          \@thanks\let\@thanks\@empty
+          \cleardoubleemptypage
+        \fi
+        \ifx\titlepage@restore\relax\else\clearpage\titlepage@restore\fi
+      \end{titlepage}
+    \else
+      \par
+      \@tempcnta=%
+      #1%
+      \relax\ifnum\@tempcnta=1\else
+        \ClassWarning{\KOMAClassName}{%
+          Optional argument of \string\maketitle\space ignored
+          at\MessageBreak
+          notitlepage-mode%
+        }%
+      \fi
+      \begingroup
+        \let\titlepage@restore\relax
+        \renewcommand*\thefootnote{\@fnsymbol\c@footnote}%
+        \let\@oldmakefnmark\@makefnmark
+        \renewcommand*{\@makefnmark}{\rlap\@oldmakefnmark}%
+        \next@tdpage
+        \if@twocolumn
+          \ifnum \col@number=\@ne
+            \ifx\@extratitle\@empty
+              \ifx\@frontispiece\@empty\else\if@twoside\mbox{}\fi\fi
+            \else
+              \@makeextratitle
+            \fi
+            \ifx\@frontispiece\@empty
+              \ifx\@extratitle\@empty\else\next@tdpage\fi
+            \else
+              \next@tpage
+              \@makefrontispiece
+              \next@tdpage
+            \fi
+            \@maketitle
+          \else
+            \ifx\@extratitle\@empty
+              \ifx\@frontispiece\@empty\else\if@twoside\mbox{}\fi\fi
+            \else
+              \twocolumn[\@makeextratitle]%
+            \fi
+            \ifx\@frontispiece\@empty
+              \ifx\@extratitle\@empty\else\next@tdpage\fi
+            \else
+              \next@tpage
+              \twocolumn[\@makefrontispiece]%
+              \next@tdpage
+            \fi
+            \twocolumn[\@maketitle]%
+          \fi
+        \else
+          \ifx\@extratitle\@empty
+            \ifx\@frontispiece\@empty\else \mbox{}\fi
+          \else
+            \@makeextratitle
+          \fi
+          \ifx\@frontispiece\@empty
+            \ifx\@extratitle\@empty\else\next@tdpage\fi
+          \else
+            \next@tpage
+            \@makefrontispiece
+            \next@tdpage
+          \fi
+          \@maketitle
+        \fi
+        \ifx\titlepagestyle\@empty\else\thispagestyle{\titlepagestyle}\fi
+        \@thanks
+      \endgroup
+    \fi
+    \setcounter{footnote}{0}%
+    \expandafter\ifnum \csname scr@v@3.12\endcsname>\scr@compatibility\relax
+      \let\thanks\relax
+      \let\maketitle\relax
+      \let\@maketitle\relax
+      \global\let\@thanks\@empty
+      \global\let\@author\@empty
+      \global\let\@date\@empty
+      \global\let\@title\@empty
+      \global\let\@subtitle\@empty
+      \global\let\@extratitle\@empty
+      \global\let\@frontispiece\@empty
+      \global\let\@titlehead\@empty
+      \global\let\@subject\@empty
+      \global\let\@publishers\@empty
+      \global\let\@uppertitleback\@empty
+      \global\let\@lowertitleback\@empty
+      \global\let\@dedication\@empty
+      \global\let\author\relax
+      \global\let\title\relax
+      \global\let\extratitle\relax
+      \global\let\titlehead\relax
+      \global\let\subject\relax
+      \global\let\publishers\relax
+      \global\let\uppertitleback\relax
+      \global\let\lowertitleback\relax
+      \global\let\dedication\relax
+      \global\let\date\relax
+    \fi
+    \global\let\and\relax
+  }
+  \newcommand*\@maketitlepage{%
+    \ifx\@titlehead\@empty \else
+      \begin{minipage}[t]{\textwidth}%
+        \usekomafont{titlehead}{\@titlehead\par}%
+      \end{minipage}\par
+    \fi
+    \null\vfill
+    \begin{center}
+      \ifx\@institution\@empty \else
+        {\usekomafont{institution}{\@institution\par}}%
+        \vskip 1em
+      \fi
+      \begin{minipage}{\textwidth}\centering
+        \rule{\textwidth}{1pt}
+        \vskip 2em
+        \ifx\@thesistype\@empty \else
+          {\usekomafont{thesistype}{\@thesistype\par}}%
+          \vskip 3em
+        \fi
+        {\usekomafont{title}{\huge \@title\par}}%
+        \vskip 1em
+        {\ifx\@subtitle\@empty\else\usekomafont{subtitle}{\@subtitle\par}\fi}%
+        \vskip 2em
+        {%
+          \usekomafont{author}{%
+            \lineskip 0.75em
+            \begin{tabular}[t]{c}
+              \@author
+            \end{tabular}\par
+          }%
+        }%
+        \vskip .5em
+        {\usekomafont{date}{\@date\par}}%
+        \vskip 2em
+        \rule{\textwidth}{1pt}
+      \end{minipage}
+      \vskip 6em
+      {\usekomafont{advisor}{\@advisortext\\\@advisor\par}}%
+      \vskip 3em
+    \end{center}\par
+    \vfill
+    \ifx\@titlelower\@empty \else
+      \begin{minipage}{\textwidth}%
+        {\usekomafont{titlelower}{\@titlelower\par}}%
+      \end{minipage}%
+    \fi
+    \vfill\null
+    \ifx\@titlefoot\@empty \else
+      \begin{minipage}[b]{\textwidth}%
+        \usekomafont{titlefoot}{\@titlefoot\par}%
+      \end{minipage}\par
+    \fi
+  }
+  \newcommand*\@adddocumentparameter[2]{%
+    \expandafter\def\csname #1\endcsname##1{\expandafter\gdef\csname @#1\endcsname{##1}}%
+    \expandafter\def\csname @#1\endcsname{}%
+    \newkomafont{#1}{#2}%
+  }
+  \@adddocumentparameter{institution}{\normalfont\scshape\large}
+  \@adddocumentparameter{thesistype}{\normalfont\normalcolor\bfseries\Large}
+  \@adddocumentparameter{advisor}{\large}
+  \@adddocumentparameter{titlelower}{}
+  \@adddocumentparameter{titlefoot}{}
+  \setkomafont{date}{\large}
+  \newcommand*\@advisortext{betreut durch}
+\makeatother
+
+\makeatletter
+  \AtBeginDocument{\begingroup\def\and{, }%
+    \hypersetup{
+      pdftitle=\@title,
+      pdfsubject=\@thesistype,
+      pdfauthor=\@author,
+      pdfcreator={\LaTeX, was sonst?},
+    }%
+  \endgroup}
+  \hypersetup{
+    pdfdisplaydoctitle=true,
+    pdflang=de-DE,
+    pdfduplex=DuplexFlipLongEdge,
+    pdfpagelayout=TwoColumnRight,
+  }
+\makeatother
+
+\makeatletter
+  \newcommand*\signaturelinewidth{5cm}
+  \newcommand*\signaturelineheight{.4pt}
+  \newcommand*\signaturelineraise{.4ex}
+  \newcommand*\signaturelabelindent{.5cm}
+  \newcommand*\signaturetextindent{}
+  \NewDocumentCommand\signatureline{
+    O{\signaturelinewidth}    % line width
+    O{\signaturelabelindent}  % label margin
+    O{%                         text indentation
+      \ifx\@empty\signaturetextindent
+        .5\dimexpr #2\relax
+      \else
+        \signaturetextindent
+      \fi
+    }
+    m                         % label
+    O{\signaturelineheight}   % line height
+    O{\signaturelineraise}    % line raise
+    D||{}                     % text
+  }{%
+    \parbox[t]{#1}{%
+      \leftskip #3%
+      \mbox{\strut #7}%
+      \vskip -#6%
+      \hrule height #5%
+      \vskip #6%
+      \scriptsize
+      \leftskip #2%
+      \rightskip #2%
+      \strut #4%
+    }%
+  }
+  \newcommand*\makeplagiarismstatement{%
+    \cleardoublepage
+    \thispagestyle{empty}%
+    \leavevmode\vfill\noindent
+    Ich versichere, dass ich diese Arbeit selbstständig verfasst und keine anderen als die angegebenen Hilfsmittel und Quellen benutzt habe.
+    Alle wörtlich oder sinngemäß aus anderen Werken übernommenen Aussagen sind als solche gekennzeichnet.
+    Die Arbeit ist weder vollständig noch in wesentlichen Teilen Gegenstand eines anderen Prüfungsverfahrens gewesen und ich habe sie weder vollständig noch in wesentlichen Teilen bereits veröffentlicht.
+    Das in Dateiform eingereichte Exemplar stimmt mit eingereichten gebundenen Exemplaren überein.
+    \par
+    \vskip 1cm
+    \hfill
+    \signatureline{Ort, Datum}|\@handinlocation, \@handindate|
+    \quad
+    \signatureline{\@author}
+  }
+  \@adddocumentparameter{handinlocation}{}
+  \@adddocumentparameter{handindate}{}
+\makeatother
+
+\makeatletter
+  \newcommand*\makedocumentstart{%
+    \cleardoubleoddpage
+    \pagenumbering{roman}%
+    \maketitle
+    \cleardoublepage
+    \pdfbookmark[chapter]{\contentsname}{chapter.toc}%
+    \tableofcontents
+    \cleardoubleevenpage
+    \cleardoubleoddpage
+    \pagenumbering{arabic}%
+  }
+  \newcommand*\makedocumentend{%
+    \cleardoublepage
+    \pdfbookmark[chapter]{\bibname}{chapter.bib}
+    \printbibliography
+    \cleardoubleevenpage
+    \cleardoubleoddpage
+    \makeplagiarismstatement
+  }
+\makeatother
+
+% Needs to be done before loading {scrlayer-scrpage}
+%\pagestyle{headings}
+
+\makeatletter
+  \setkomafont{caption}{\normalfont\small}
+  \setkomafont{captionlabel}{\bfseries\sffamily}
+  % Does not work with {caption}, which is used for subfloats.
+  % We set the option in the {caption} options instead.
+  %\setcapdynwidth{.9\linewidth}
+  \captionsetup{margin=.05\textwidth}
+  \captionsetup[sub]{labelformat=simple}
+  \renewcommand*\thesubfigure{(\alph{subfigure})}
+  \renewcommand*\p@subfigure{\thefigure\,}
+\makeatother
+
+%\makeatletter
+%  \newcommand*\nsubcaption[1]{\setcounter{sub\@captype}{\numexpr(#1)-1\relax}\subcaption}
+%  % Create a command that tags every subfloat without a description.
+%  \newcommand*\subfloattagpadding{}%
+%  \DeclareCaptionFormat{leftbehind}{\raisebox{-\baselineskip}[0pt][0pt]{\subfloattagpadding#1\subfloattagpadding}\hfill\par}
+%  \DeclareCaptionFormat{rightbehind}{\hfill\raisebox{-\baselineskip}[0pt][0pt]{\subfloattagpadding#1\subfloattagpadding}\par}
+%  \DeclareCaptionFormat{leftoutside}{\raisebox{-\baselineskip}[0pt][0pt]{\llap{\subfloattagpadding#1\subfloattagpadding}}\hfill\par}
+%  \DeclareCaptionFormat{rightoutside}{\hfill\raisebox{-\baselineskip}[0pt][0pt]{\rlap{\subfloattagpadding#1\subfloattagpadding}}\par}
+%  \newcommand*\subfloatcaptionsetup[1]{%
+%    \captionsetup[sub\@captype]{#1}%
+%  }
+%  \NewDocumentCommand\tagsubfloats{ o }{%
+%    \subfloatcaptionsetup{singlelinecheck=false, skip=0pt}%
+%    \IfValueT{#1}{\subfloatcaptionsetup{format=#1}}%
+%    \apptocmd\subcaption@iiminipage{\caption{}}{}{}%
+%  }
+%\makeatother
+
+
+
+%%% miscellaneous
+
+\institution{%
+  Eberhard-Karls-Universität Tübingen\\%
+  Physikalisches Institut\quad\(\circ\)\quad
+  Experimentalphysik~II%
+}
+\titlelower{%
+  \centering
+  \includegraphics[width=.4\textwidth]{pit2logo_greyscale}
+}
+
+
+%\DeclareSIUnit\dBm{dBm}
+%\DeclareSIUnit\Phizero{\Phi_0}
+
+
+
+% Provide a switch for the size reduced version of this document.
+\makeatletter
+  \newif\ifreducesize
+%  \tikzset{
+%    % Make sure this key exists.
+%    install size reduction options/.append code={},
+%    % Provide a switch handler, first argument is proper value, second is size reduced value.
+%    /handlers/.depending on size reduction/.code 2 args={%
+%      \ifreducesize
+%        \pgfkeys{\pgfkeyscurrentpath={#2}}%
+%      \else
+%        \pgfkeys{\pgfkeyscurrentpath={#1}}%
+%      \fi
+%    },
+%  }
+  \AtBeginDocument{%
+    \ifreducesize
+      \renewcommand*\makeplagiarismstatement{%
+         \cleardoublepage
+         \thispagestyle{empty}%
+         \leavevmode\vfill\noindent
+         Zur Reduktion der Dateigröße wurden in der vorliegenden Version dieser Arbeit modifizierte Abbildungen verwendet.
+         Sie weicht in dieser Hinsicht von der eingereichten Version ab.
+       }%
+      \graphicspath{{./img/common/}{./img/sd/}}%
+      \svgpath{{./img/common/}{./img/sd/}}%
+      \svgsetup{inkscapepath={./svg-inkscape-sd/}}%
+%      \tikzset{install size reduction options}%
+    \else
+      \graphicspath{{./img/common/}{./img/hd/}}%
+      \svgpath{{./img/common/}{./img/hd/}}%
+      \svgsetup{inkscapepath={./svg-inkscape-hd/}}%
+    \fi
+  }
+\makeatother
+
+\makeatletter
+  \newif\ifshowtodos
+  \newcommand*\@show@todo[1]{%
+    \GenericWarning{(todo)\@spaces}{%
+      LaTeX Warning:
+      TODO: #1%
+    }%
+  }
+  \newcommand*\todo[1]{%
+    \ifshowtodos
+      \@show@todo{#1}%
+    \fi
+    \ignorespaces
+  }
+\makeatother

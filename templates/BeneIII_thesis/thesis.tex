@@ -1,0 +1,142 @@
+% !TeX encoding = utf8
+% !TeX spellcheck = de_DE
+% !BIB program = biber
+\input{preamble}
+
+\thesistype{Masterarbeit}
+\title{Der Titel der Arbeit}
+\author{Eberhard im Barte}
+\date{Februar 2035}
+\advisor{Prof.~Dr.~Dieter Kölle\\Prof.~Dr.~Reinhold Kleiner}
+\handinlocation{Tübingen}
+\handindate{23.02.2035}
+
+\todo{Literatur-Datenbank einbinden.}
+%\addbibresource{thesislit.bib}
+
+%\showtodostrue
+%\reducesizetrue
+
+\begin{document}
+
+\makedocumentstart
+
+\chapter{Über dieses Template}
+Dies ist ein Template für Bachelor- und Masterarbeiten.
+Benutzt es und wendet euch bei Fragen gerne an mich (Benedikt Wilde).
+Es folgt eine Zusammenfassung der in der Präambel getroffenen Einstellungen.
+
+\let\pkg\textsf
+
+\section{Layout}
+\begin{itemize}
+  \item A4, 11-Punkt-Schrift, zweiseitiger Satz, Kapitel beginnen auf rechten Seiten, \SI{0.5}{\centi\meter} Bindekorrektur.
+  
+  \item \texttt{itemize} Ebene~1
+    \begin{itemize}
+      \item \texttt{itemize} Ebene~2
+        \begin{itemize}
+          \item \texttt{itemize} Ebene~3
+            \begin{itemize}
+              \item \texttt{itemize} Ebene~4
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+    \begin{enumerate}
+      \item \texttt{enumerate} Ebene~1
+        \begin{enumerate}
+          \item \texttt{enumerate} Ebene~2
+            \begin{enumerate}
+              \item \texttt{enumerate} Ebene~3
+                \begin{enumerate}
+                  \item \texttt{enumerate} Ebene~4
+                \end{enumerate}
+            \end{enumerate}
+        \end{enumerate}
+    \end{enumerate}
+    \begin{description}
+      \item[Etwas] in \texttt{description}.
+    \end{description}
+    
+  \item Fließumgebungen werden automatisch zentriert.
+    Ihre Über-/Unterschriften mit etwas Einzug und etwas kleiner gesetzt.
+  
+  \item Kolumnentitel in der Kopf, Seitenzahlen in der Fußzeile (Standardstil).
+  
+  \item Der Bibliographiestil sollte für Physik-Arbeiten passen.
+    Bei Fragen gerne an mich wenden.
+\end{itemize}
+
+\section{Hilfs-Makros}
+Folgende Makros können nützlich sein.
+\begin{itemize}
+  \item \wrap{Brot}{Butter}
+  
+  \item \texttt{\string\makedocumentstart} setzt die Titelseite (wie oben) und das Inhaltsverzeichnis.
+    Diese Seiten werden dabei mit kleinen römischen Zahlen nummeriert, Kapitel~1 beginnt dann auf Seite~1.
+    
+  \item \texttt{\string\makedocumentend} setzt die Bibliographie und die Eigenständigkeitserklärung.
+    Der Text dieser Erklärung ist der Prüfungsordnung für den Physik-Master entnommen.
+    Falls es sich um eine andere Arbeit handelt, sollte dieser ggf.~angepasst werden.
+    
+  \item Bilder werden zurzeit aus den Verzeichnissen \texttt{./img/common/} und \texttt{./img/hd/} geladen.
+    Wenn ihr am Anfang der Arbeit \texttt{\string\reducesizetrue} sagt, werden sie stattdessen aus \texttt{./img/common/} und \texttt{./img/sd/} geladen.
+    Das könnt ihr benutzen, um eine Version eurer Arbeit mit kleinerer Dateigröße (für E-Mail-Versand) zu erstellen, indem ihr die Bilder mit geringerer Auflösung benutzt.
+    Die Eigenständigkeitserklärung wird dann durch einen entsprechenden Vermerk ersetzt.
+    
+  \item Mit dem Makro \texttt{\string\todo} könnt ihr Notizen in euer Dokument einfügen, die nicht gedruckt werden.
+    Wenn ihr am Anfang \texttt{\string\showtodostrue} sagt, werden diese Notizen als Warnung ausgegeben.
+\end{itemize}
+
+\section{Text-Makros}
+Die folgenden Text-Makros habe ich in der Präambel definiert.
+Wenn sie unerwünscht sind, einfach rausschmeißen.
+\begin{itemize}\item \url[https://]{de.wikipedia.org}
+  
+  \item \email{benedikt.wilde@uni-tuebingen.de}
+  
+  \item Zusätzliche Tabellenspalten-Typen
+    \begin{center}
+      \begin{tabular}{L{p}{3cm} C{p}{3cm} R{p}{3cm}}\toprule
+        \texttt{L} & \texttt{C} & \texttt{R} \\\midrule
+        Dieser Text wird automatisch umgebrochen und dabei links ausgerichtet. &
+        Dieser Text wird automatisch umgebrochen und dabei zentriert ausgerichtet. &
+        Dieser Text wird automatisch umgebrochen und dabei rechts ausgerichtet. \\\bottomrule
+      \end{tabular}
+    \end{center}
+\end{itemize}
+
+\section{Mathe-Makros}
+Die folgenden Mathe-Makros habe ich in der Präambel definiert.
+Wenn sie unerwünscht sind, einfach rausschmeißen.
+\begin{gather*}
+  a \times b, \vec a \vectimes \vec b \\
+  \e \text{ (Eulersche Zahl, nicht die Elementarladung \(e\))} \\
+  \i \text{ (imaginäre Einheit, nicht die Variable \(i\))} \\
+  \grad f(\vec x), \div\vec v(\vec x), \rot\vec v(x), \laplace f(\vec x) \\
+  \int f(x) \dif x, \int \dif*x f(x), \int \frac{\dif**x}{f(x)}, \del x f(x), \int_M \dif\omega = \int_{\bndry M} \omega \\
+  \diff[n]{f}{x}, \ddiff{f}{x}{y}, \dell[n]{f}{x}, \ddell{f}{x}{y} \\
+  \abs{z}, \abs[\Big]{\int f(x) \dif x}, \abs[\auto]{\int f(x) \dif x}, \mean{f}, \mean[\Big]{f}, \mean{f}[x] \\
+  \vect{a\\b\\c}, \absvect{a\\b\\c}, \diff{f}{x} \evalwith{x=2}, \frac{1}{2} \, a x^2 + b x + C \fromto{0}{\pi}
+\end{gather*}
+
+\section{Auskommentierte Makros}
+Die folgenden Makros sind auskommentiert, da sie vermutlich nicht gebraucht werden.
+Sie können getrost gelöscht werden.
+Falls sie doch gebraucht werden, einfach die Kommentarzeichen entfernen.
+\begin{itemize}
+  \item Einige Definitionen müssen geändert werden, wenn Lua\LaTeX\ mit \pkg{fontspec} benutzt wird.
+    Die entsprechenden Definitionen sind zurzeit auskommentiert.
+    Falls ihr zu Lua\LaTeX\ wechseln wollt, sagt mir am besten einfach Bescheid.
+  
+  \item \texttt{\string\thispagepdflscape} kann benutzt werden, um die aktuelle Seite im PDF-Betrachter zu drehen.
+  
+  \item \texttt{\string\tagsubfloats} kann benutzt werden, um Subfloats automatisch zu nummerieren.
+    Falls gewünscht, erkläre ich das gerne kurz.
+    
+  \item Die Einheiten \texttt{\string\dBm} und \texttt{\string\Phizero}.
+\end{itemize}
+
+\makedocumentend
+
+\end{document}

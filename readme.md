@@ -20,3 +20,6 @@ When you want to update to the most recent revision, just run
 git pull
 ```
 in the repository.
+
+## Reporting Mistakes or Suggestions
+If you spot a mistake or typo in the primer, find some passage written in a confusing manner or have suggestions for improvements like additional topics to cover, you may open an issue here instead of writing me by email (as suggested in the text itself). Please open a separate issue for each suggestion. Typos may be collected in a single issue.

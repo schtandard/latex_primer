@@ -705,11 +705,7 @@
   \newcommand*\makeplagiarismstatement{%
     \cleardoublepage
     \thispagestyle{empty}%
-    \leavevmode\vfill\noindent
-    Ich versichere, dass ich diese Arbeit selbstständig verfasst und keine anderen als die angegebenen Hilfsmittel und Quellen benutzt habe.
-    Alle wörtlich oder sinngemäß aus anderen Werken übernommenen Aussagen sind als solche gekennzeichnet.
-    Die Arbeit ist weder vollständig noch in wesentlichen Teilen Gegenstand eines anderen Prüfungsverfahrens gewesen und ich habe sie weder vollständig noch in wesentlichen Teilen bereits veröffentlicht.
-    Das in Dateiform eingereichte Exemplar stimmt mit eingereichten gebundenen Exemplaren überein.
+    \leavevmode\vfill\noindent\@plagiarismstatement
     \par
     \vskip 1cm
     \hfill
@@ -717,6 +713,7 @@
     \quad
     \signatureline{\@author}
   }
+  \@adddocumentparameter{plagiarismstatement}{}%
   \@adddocumentparameter{handinlocation}{}
   \@adddocumentparameter{handindate}{}
 \makeatother
@@ -787,7 +784,13 @@
 }
 \titlelower{%
   \centering
-  \includegraphics[width=.4\textwidth]{pit2logo_greyscale}
+  \includegraphics[width=.4\textwidth]{pit2logo_greyscale}%
+}
+\plagiarismstatement{%
+  Ich versichere, dass ich diese Arbeit selbstständig verfasst und keine anderen als die angegebenen Hilfsmittel und Quellen benutzt habe.
+  Alle wörtlich oder sinngemäß aus anderen Werken übernommenen Aussagen sind als solche gekennzeichnet.
+  Die Arbeit ist weder vollständig noch in wesentlichen Teilen Gegenstand eines anderen Prüfungsverfahrens gewesen und ich habe sie weder vollständig noch in wesentlichen Teilen bereits veröffentlicht.
+  Das in Dateiform eingereichte Exemplar stimmt mit eingereichten gebundenen Exemplaren überein.%
 }
 
 

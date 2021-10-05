@@ -1,5 +1,6 @@
 % !TeX encoding = utf8
 % !TeX spellcheck = de_DE
+% !TeX program = lualatex
 % !BIB program = biber
 \input{preamble}
 
@@ -114,11 +115,12 @@ Wenn sie unerwünscht sind, einfach rausschmeißen.
   a \times b, \vec a \vectimes \vec b \\
   \e \text{ (Eulersche Zahl, nicht die Elementarladung \(e\))} \\
   \i \text{ (imaginäre Einheit, nicht die Variable \(i\))} \\
+  \cpi \text{ (Kreiszahl, nicht die Variable \(\pi\))} \\
   \grad f(\vec x), \div\vec v(\vec x), \rot\vec v(x), \laplace f(\vec x) \\
   \int f(x) \dif x, \int \dif*x f(x), \int \frac{\dif**x}{f(x)}, \del x f(x), \int_M \dif\omega = \int_{\bndry M} \omega \\
   \diff[n]{f}{x}, \ddiff{f}{x}{y}, \dell[n]{f}{x}, \ddell{f}{x}{y} \\
   \abs{z}, \abs[\Big]{\int f(x) \dif x}, \abs[\auto]{\int f(x) \dif x}, \mean{f}, \mean[\Big]{f}, \mean{f}[x] \\
-  \vect{a\\b\\c}, \absvect{a\\b\\c}, \diff{f}{x} \evalwith{x=2}, \frac{1}{2} \, a x^2 + b x + C \fromto{0}{\pi}
+  \vect{a\\b\\c}, \absvect{a\\b\\c}, \diff{f}{x} \evalwith{x=2}, \frac{1}{2} \, a x^2 + b x + C \fromto{0}{\cpi}
 \end{gather*}
 
 \section{Auskommentierte Makros}

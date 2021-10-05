@@ -11,20 +11,14 @@
   fontsize=11,
   ]{scrreprt}
 
-% {fontenc} should always be set to [T1].
-% {lmodern} provides the Latin Modern font, a scalable version of Computer Modern.
-% The {textcomp} package provides some glyphs missing by default, notably \textminus and \textmu.
-% \input{glyphtounicode}\pdfgentounicode=1 makes ligatures copy-pasteable.
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{textcomp}
-\input{glyphtounicode}
-\pdfgentounicode=1
-
 % The {fontspec} package allows font control with LuaTeX or XeTeX.
 % The {unicode-math} package allows the use of unicode math fonts.
-%\usepackage{fontspec}
-%\usepackage[math-style=ISO]{unicode-math}
+\usepackage{fontspec}
+\usepackage[
+  math-style=ISO,
+  partial=upright,
+  warnings-off={mathtools-overbracket, mathtools-colon},
+  ]{unicode-math}
 
 % The {etoolbox} package gives us some additional macro manipulation capabilities.
 % The {xparse} package provides an advanced interface for defining commands (LaTeX3).
@@ -98,9 +92,10 @@
 % The {mhchem} package provides commands for typesetting chemical formulas and related expressions.
 % We need to define \xtimes now, because siunitx checks its existence (and possibly size).
 \let\xtimes\times
+\let\times\cdot
 \usepackage[
   locale=DE,
-  output-product=\xtimes,
+  product-symbol=\xtimes,
   ]{siunitx}
 \usepackage[version=4]{mhchem}
 
@@ -115,7 +110,6 @@
 \graphicspath{{./img/}}
 \usepackage[inkscapearea=page, usexcolor]{svg}
 \svgpath{{./img/}}
-\pdfsuppresswarningpagegroup=1
 
 
 %% For cross-referencing:
@@ -141,42 +135,48 @@
 %% just symbols
 \makeatletter
   % constants
-  \newcommand*\e{{\mathrm e}}
-  \renewcommand*\i{{\mathrm i}}
+  \protected\def\e{{\symup e}}
+  \protected\def\i{{\symup i}}
+  \protected\def\cpi{{\uppi}}
+  \sisetup{
+    input-symbols=\e\i\cpi,
+  }
   % for use in other macros
-  \def\@difsym{{\mathrm d}}
-  \let\@delsym\partial
-  \def\@Difsym{{\mathrm D}}
-  \def\@DifFeynsym{{\mathcal D}}
-  \let\@bndrysym\partial
+  \def\@difsym{{\symup d}}
+  \def\@delsym{{\symup\partial}}
+  \def\@Difsym{{\symup D}}
+  \def\@DifFeynsym{{\symcal D}}
+  \def\@bndrysym{{\symup\partial}}
 \makeatother
 
 % unary operators
 \makeatletter
-  \DeclareMathOperator\grad{grad}
-  \let\div\undefined
-  \DeclareMathOperator\div{div}
-  \DeclareMathOperator\rot{rot}
-  \DeclareMathOperator\laplace{\Delta}
-%  \DeclareMathOperator\laplace{\symup{\Delta}}
-  % \dif[<exponent>]{<var>}
-  % starred version for use at start of integral
-  % double starred version for use at start of enumerator
-  \NewDocumentCommand\dif{s s o m}{%
-    \IfBooleanF{#2}{\IfBooleanTF{#1}{\unskip}{\mathop{}}\!}%
-    \@difsym%
-    \IfValueT{#3}{^{#3}}%
-    #4%
-    \IfBooleanT{#1}{\mathop{}\!}%
+  \AtBeginDocument{%
+    \DeclareMathOperator\grad{grad}
+    \let\div\undefined
+    \DeclareMathOperator\div{div}
+    \DeclareMathOperator\rot{rot}
+    \DeclareMathOperator\laplace{\Delta}
+%    \DeclareMathOperator\laplace{\symup{\Delta}}
+    % \dif[<exponent>]{<var>}
+    % starred version for use at start of integral
+    % double starred version for use at start of enumerator
+    \NewDocumentCommand\dif{s s o m}{%
+      \IfBooleanF{#2}{\IfBooleanTF{#1}{\unskip}{\mathop{}}\!}%
+      \@difsym%
+      \IfValueT{#3}{^{#3}}%
+      #4%
+      \IfBooleanT{#1}{\mathop{}\!}%
+    }
+    % \del[<exponent>]{<var>}
+    % starred version adds no spaces
+    \NewDocumentCommand\del{s o m}{%
+      \IfBooleanF{#1}{\mathop{}\!}%
+      \@delsym_{#3}%
+      \IfValueT{#2}{^{#2}}%
+    }
+    \NewDocumentCommand\bndry{m}{{\@bndrysym #1}}
   }
-  % \del[<exponent>]{<var>}
-  % starred version adds no spaces
-  \NewDocumentCommand\del{s o m}{%
-    \IfBooleanF{#1}{\mathop{}\!}%
-    \@delsym_{#3}%
-    \IfValueT{#2}{^{#2}}%
-  }
-  \NewDocumentCommand\bndry{m}{{\@bndrysym #1}}
 \makeatother
 
 % binary operators
@@ -230,8 +230,7 @@
 \makeatletter
   \AtBeginDocument{%
     \let\arrow\vec
-    \let\vec\bm
-%    \let\vec\symbf
+    \let\vec\symbf
   }
 %  \def\uvec#1{\hat{\vec{#1}}}
   \newcommand*\vect[1]{\begin{pmatrix}#1\end{pmatrix}}

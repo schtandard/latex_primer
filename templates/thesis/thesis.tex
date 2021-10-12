@@ -24,7 +24,8 @@
 
 \chapter{Über dieses Template}
 Dies ist ein Template für Bachelor- und Masterarbeiten.
-Benutzt es und wendet euch bei Fragen gerne an mich (Benedikt Wilde).
+Ich habe es ursprünglich für meine Kollegen an der Uni Tübingen erstellt, was sich in den Voreinstellungen niederschlägt.
+Auf eigene Gefahr kann es angepasst und genutzt werden.
 Es folgt eine Zusammenfassung der in der Präambel getroffenen Einstellungen.
 
 \let\pkg\textsf
@@ -32,7 +33,7 @@ Es folgt eine Zusammenfassung der in der Präambel getroffenen Einstellungen.
 \section{Layout}
 \begin{itemize}
   \item A4, 11-Punkt-Schrift, zweiseitiger Satz, Kapitel beginnen auf rechten Seiten, \SI{0.5}{\centi\meter} Bindekorrektur.
-  
+
   \item \texttt{itemize} Ebene~1
     \begin{itemize}
       \item \texttt{itemize} Ebene~2
@@ -58,33 +59,32 @@ Es folgt eine Zusammenfassung der in der Präambel getroffenen Einstellungen.
     \begin{description}
       \item[Etwas] in \texttt{description}.
     \end{description}
-    
+
   \item Fließumgebungen werden automatisch zentriert.
     Ihre Über-/Unterschriften mit etwas Einzug und etwas kleiner gesetzt.
-  
+
   \item Kolumnentitel in der Kopf, Seitenzahlen in der Fußzeile (Standardstil).
-  
+
   \item Der Bibliographiestil sollte für Physik-Arbeiten passen.
-    Bei Fragen gerne an mich wenden.
 \end{itemize}
 
 \section{Hilfs-Makros}
 Folgende Makros können nützlich sein.
 \begin{itemize}
   \item \texttt{\string\wrap}: \wrap{Butter}{Brot}
-  
+
   \item \texttt{\string\makedocumentstart} setzt die Titelseite (wie oben) und das Inhaltsverzeichnis.
     Diese Seiten werden dabei mit kleinen römischen Zahlen nummeriert, Kapitel~1 beginnt dann auf Seite~1.
-    
+
   \item \texttt{\string\makedocumentend} setzt die Bibliographie und die Eigenständigkeitserklärung.
     Der Text dieser Erklärung ist der Prüfungsordnung für den Physik-Master entnommen.
     Falls es sich um eine andere Arbeit handelt, sollte dieser ggf.~angepasst werden.
-    
+
   \item Bilder werden zurzeit aus den Verzeichnissen \texttt{./img/common/} und \texttt{./img/hd/} geladen.
     Wenn ihr am Anfang der Arbeit \texttt{\string\reducesizetrue} sagt, werden sie stattdessen aus \texttt{./img/common/} und \texttt{./img/sd/} geladen.
     Das könnt ihr benutzen, um eine Version eurer Arbeit mit kleinerer Dateigröße (für E-Mail-Versand) zu erstellen, indem ihr die Bilder mit geringerer Auflösung benutzt.
     Die Eigenständigkeitserklärung wird dann durch einen entsprechenden Vermerk ersetzt.
-    
+
   \item Mit dem Makro \texttt{\string\todo} könnt ihr Notizen in euer Dokument einfügen, die nicht gedruckt werden.
     Wenn ihr am Anfang \texttt{\string\showtodostrue} sagt, werden diese Notizen als Warnung ausgegeben.
 \end{itemize}
@@ -94,9 +94,9 @@ Die folgenden Text-Makros habe ich in der Präambel definiert.
 Wenn sie unerwünscht sind, einfach rausschmeißen.
 \begin{itemize}
   \item \url[https://]{de.wikipedia.org}
-  
-  \item \email{benedikt.wilde@uni-tuebingen.de}
-  
+
+  \item \email{email@example.com}
+
   \item Zusätzliche Tabellenspalten-Typen
     \begin{center}
       \begin{tabular}{L{p}{3cm} C{p}{3cm} R{p}{3cm}}\toprule
@@ -130,13 +130,12 @@ Falls sie doch gebraucht werden, einfach die Kommentarzeichen entfernen.
 \begin{itemize}
   \item Einige Definitionen müssen geändert werden, wenn Lua\LaTeX\ mit \pkg{fontspec} benutzt wird.
     Die entsprechenden Definitionen sind zurzeit auskommentiert.
-    Falls ihr zu Lua\LaTeX\ wechseln wollt, sagt mir am besten einfach Bescheid.
-  
+
   \item \texttt{\string\thispagepdflscape} kann benutzt werden, um die aktuelle Seite im PDF-Betrachter zu drehen.
-  
+
   \item \texttt{\string\tagsubfloats} kann benutzt werden, um Subfloats automatisch zu nummerieren.
     Falls gewünscht, erkläre ich das gerne kurz.
-    
+
   \item Die Einheiten \texttt{\string\dBm} und \texttt{\string\Phizero}.
 \end{itemize}
 

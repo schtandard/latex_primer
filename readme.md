@@ -6,7 +6,7 @@ While I enjoy spreading the good news of LaTeX, repeating the same general advic
 For everyone who knows me, this document is meant to replace that initial session of conveying basic knowledge and good practices as well as serve as a reference for these things.
 It is _not_ meant to discourage you from approaching me with questions or problems regarding LaTeX, though I may refuse to explain things contained in this document.
 For everyone else, I hope that this may serve you as a valuable read and as a useful reference.
-I do however have to ask you not to contact me with questions or issues, as I am unable to provide large-scale LaTeX~support.
+I do however have to ask you not to contact me with questions or issues, as I am unable to provide large-scale LaTeX support.
 
 ## Using This Repository
 This repository is meant to serve as a convenient way to keep your local copy of the primer up to date.

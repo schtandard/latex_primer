@@ -115,19 +115,19 @@
 %% For cross-referencing:
 
 % The {biblatex} package provides advanced bilbiography capabilities.
-% The {hyperref} package converts all internal references to links and offers a lot of further options.
 % The {caption} package offers the capability to fix where Links to a figure lead (to the image instead of the caption) and removes the colon before the caption text when it is empty.
 % The {subcaption} package provides commands for setting captions to subfloats.
+% The {hyperref} package converts all internal references to links and offers a lot of further options.
 \usepackage[style=phys]{biblatex}
+\usepackage[
+    hypcap,
+  ]{caption}
+\usepackage{subcaption}
 \usepackage[
     hidelinks,
     pdfencoding=auto,
     bookmarksnumbered,
   ]{hyperref}
-\usepackage[
-    hypcap,
-  ]{caption}
-\usepackage{subcaption}
 
 
 %%% symbols

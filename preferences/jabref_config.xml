@@ -8,6 +8,8 @@
       <node name="jabref">
         <map>
           <entry key="defaultBibtexKeyPattern" value="[auth:lower][year]"/>
+          <entry key="biblatexMode" value="true"/>
+          <entry key="fxTheme" value="Dark.css"/>
         </map>
         <node name="bibtexkeypatterns">
           <map>

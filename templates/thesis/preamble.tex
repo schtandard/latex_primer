@@ -252,6 +252,11 @@
 % Center all floats by default.
 \makeatletter
   \appto\@floatboxreset{\centering}
+  % Also consider KOMA-Script's non-floating variants.
+  \expandafter\appto\csname figure-\endcsname{\centering}
+  \expandafter\appto\csname table-\endcsname{\centering}
+  % captionbeside requires \raggedright.
+  \preto\captionbeside{\raggedright}
 \makeatother
 
 % Change the default style of lists.
@@ -745,13 +750,31 @@
 \makeatletter
   \setkomafont{caption}{\normalfont\small}
   \setkomafont{captionlabel}{\bfseries\sffamily}
+  \setcapindent{1em}
   % Does not work with {caption}, which is used for subfloats.
   % We set the option in the {caption} options instead.
   %\setcapdynwidth{.9\linewidth}
   \captionsetup{margin=.05\textwidth}
+  % Adjust the default values for captionbeside.
+  % We want the default width to be .9\linewidth.
+  % Sadly, there is no interface for this, so here's a hack.
+  \renewcommand*\scap@width{.9\linewidth}
+  \pretocmd\@captionbeside{%
+    \setlength{\@tempdima}{\scap@width}%
+    \addtolength{\@tempdima}{-\linewidth}%
+    \setlength{\@tempdima}{-.5\@tempdima}%
+    \edef\scap@move{\the\@tempdima}%
+  }{}{}
+  % Also, we want tables to have captions on the left by default.
+  % (Figures retain the default value of captions on the right.)
+  \AddToHook{env/table/begin}{\KOMAoptions{captions=leftbeside}}
+  \AddToHook{env/table-/begin}{\KOMAoptions{captions=leftbeside}}
+  % Set up the subfloat label formats.
   \captionsetup[sub]{labelformat=simple}
   \renewcommand*\thesubfigure{(\alph{subfigure})}
   \renewcommand*\p@subfigure{\thefigure\,}
+  \renewcommand*\thesubtable{(\alph{subtable})}
+  \renewcommand*\p@subtable{\thetable\,}
 \makeatother
 
 %\makeatletter

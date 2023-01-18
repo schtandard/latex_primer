@@ -11,6 +11,10 @@
   fontsize=11,
   ]{scrreprt}
 
+% The {mathtools} package provides more handy math commands, it is an extension package to {amsmath}.
+% It should be loaded before {unicode-math}.
+\usepackage{mathtools}
+
 % The {fontspec} package allows font control with LuaTeX or XeTeX.
 % The {unicode-math} package allows the use of unicode math fonts.
 \usepackage{fontspec}
@@ -51,10 +55,7 @@
 % The {babel} package makes sure LaTeX knows your language (choose your language as the package loading option).
 % The {microtype} package conducts "subliminal refinements towards typographical perfection", i.e. makes your document look even better.
 % The {nowidow} package prevents widows and orphans.
-\usepackage[
-%  english,
-  main=ngerman,
-  ]{babel}
+\usepackage{babel}
 \usepackage{microtype}
 \usepackage[
   defaultlines=2,
@@ -70,20 +71,15 @@
 \usepackage{booktabs}
 
 % The {enumitem} package provides improved list environment capabilities.
-%\usepackage{enumitem}
+\usepackage{enumitem}
 
 
 %% For typesetting maths:
 
 % The {bm} package provides bold math symbols.
-% The {mathtools} package provides more handy math commands, it is an extension package to {amsmath}.
 % The {mleftright} package provides \mleft and \mright as alternatives to \left and \right with better spacing.
 \usepackage{bm}
-\usepackage{mathtools}
 \usepackage{mleftright}
-
-% The {dsfont} package provides double stroke math symbols.
-%\usepackage{dsfont}
 
 
 %% The {siunitx} package has to be loaded after the math packages.
@@ -606,11 +602,13 @@
         \vskip 2em
         \ifx\@thesistype\@empty \else
           {\usekomafont{thesistype}{\@thesistype\par}}%
-          \vskip 3em
+          \vskip 1em
         \fi
         {\usekomafont{title}{\huge \@title\par}}%
-        \vskip 1em
-        {\ifx\@subtitle\@empty\else\usekomafont{subtitle}{\@subtitle\par}\fi}%
+        \ifx\@subtitle@empty\else
+          \vskip 1em
+          {\usekomafont{subtitle}{\@subtitle\par}}%
+        \fi
         \vskip 2em
         {%
           \usekomafont{author}{%

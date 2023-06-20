@@ -748,6 +748,7 @@
 \makeatletter
   \setkomafont{caption}{\normalfont\small}
   \setkomafont{captionlabel}{\bfseries\sffamily}
+  \newkomafont{captiontitle}{\usekomafont{captionlabel}}
   \setcapindent{1em}
   % Does not work with {caption}, which is used for subfloats.
   % We set the option in the {caption} options instead.
@@ -773,6 +774,18 @@
   \renewcommand*\p@subfigure{\thefigure\,}
   \renewcommand*\thesubtable{(\alph{subtable})}
   \renewcommand*\p@subtable{\thetable\,}
+  % Use an optional arugment to \caption as a caption title when given.
+  % (It is still used for the list of figures etc.)
+  \renewcommand\memcaptioninfo[4]{%
+    \def\@currentcaptiontitle{#3}%
+  }
+  \DeclareCaptionTextFormat{withtitle}{%
+    \ifx\@currentcaptiontitle\undefined\else
+      {\usekomafont{captiontitle}\@currentcaptiontitle.}\space
+    \fi
+    #1%
+  }
+  \captionsetup{textformat=withtitle}
 \makeatother
 
 %\makeatletter

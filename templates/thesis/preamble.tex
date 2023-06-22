@@ -115,9 +115,7 @@
 % The {subcaption} package provides commands for setting captions to subfloats.
 % The {hyperref} package converts all internal references to links and offers a lot of further options.
 \usepackage[style=phys]{biblatex}
-\usepackage[
-    hypcap,
-  ]{caption}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage[
     hidelinks,
@@ -253,6 +251,12 @@
   \expandafter\appto\csname table-\endcsname{\centering}
   % captionbeside requires \raggedright.
   \preto\captionbeside{\raggedright}
+\makeatother
+
+% Make KOMA-Script's non-floating "float" variants support {caption}'s [hypcap].
+\makeatletter
+  \expandafter\appto\csname figure-\endcsname{\captionsetup{type=figure}}
+  \expandafter\appto\csname table-\endcsname{\captionsetup{type=table}}
 \makeatother
 
 % Change the default style of lists.
@@ -777,7 +781,23 @@
   % Use an optional arugment to \caption as a caption title when given.
   % (It is still used for the list of figures etc.)
   \renewcommand\memcaptioninfo[4]{%
-    \def\@currentcaptiontitle{#3}%
+    \begingroup
+      \def\@tempa{#3}%
+      \def\@tempb{#4}%
+      \ifx\@tempa\@tempb
+        \expandafter\@firstoftwo
+      \else
+        % \caption adds a \relax at the end of the caption for the default title.
+        % We still had to do the first check because {captionbeside} does not.
+        \def\@tempb{#4\relax}%
+        \ifx\@tempa\@tempb
+          \expandafter\expandafter\expandafter\@firstoftwo
+        \else
+          \expandafter\expandafter\expandafter\@secondoftwo
+        \fi
+      \fi
+    {\endgroup\let\@currentcaptiontitle\undefined}%
+    {\endgroup\def\@currentcaptiontitle{#3}}%
   }
   \DeclareCaptionTextFormat{withtitle}{%
     \ifx\@currentcaptiontitle\undefined\else

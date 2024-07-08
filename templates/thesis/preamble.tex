@@ -15,7 +15,7 @@
 % It should be loaded before {unicode-math}.
 \usepackage{mathtools}
 
-% The {fontspec} package allows font control with LuaTeX or XeTeX.
+% The {fontspec} package allows font control with LuaLaTeX or XeLaTeX.
 % The {unicode-math} package allows the use of unicode math fonts.
 \usepackage{fontspec}
 \usepackage[
@@ -778,7 +778,7 @@
   \renewcommand*\p@subfigure{\thefigure\,}
   \renewcommand*\thesubtable{(\alph{subtable})}
   \renewcommand*\p@subtable{\thetable\,}
-  % Use an optional arugment to \caption as a caption title when given.
+  % Use an optional argument to \caption as a caption title when given.
   % (It is still used for the list of figures etc.)
   \renewcommand\memcaptioninfo[4]{%
     \begingroup
